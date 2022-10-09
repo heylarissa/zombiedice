@@ -12,6 +12,8 @@ class Dice:
         self.yellowDices = self.setDice(4, "TPCTPC")
         self.redDices = self.setDice(3, "TPTCPT")
 
+        self.currentDices = () # tupla que atualiza com os últimos dados lançados
+
     def setDice (self, quantity, dices_string):
         diceList = []
         for i in range(quantity):
@@ -62,11 +64,12 @@ class Game:
         """ seleciona o próximo player e 
         atualiza o número de turnos jogados pelo jogador """
 
-        if (self.turns >= 1):
+        if (self.turns >= 1 and self.status == False):
             self.currentPlayer.turns+=1
             self.players[self.currentPlayer.id] = self.currentPlayer
 
             id_next = self.currentPlayer.id + 1
+
             if id_next == self.playersNumber: # se estiver no último jogador, volta para o primeiro
                 id_next = 0
             
@@ -100,13 +103,13 @@ def main():
     while ((game.playersNumber < 2)):
         print ("The number of players should be 2 or more")
 
-        game.playersNumber = int(input ("Number of Players: " ))
+        game.playersNumber = int(input ("Number of Players: "))
 
     dices = Dice()
 
     while (not game.over):
         game.printScreen()
-        game.selectNextPlayer()
+        
         dices.rollDices()
         newBrains = 0
 
@@ -121,22 +124,19 @@ def main():
         
         game.setStatus(int(input("Press 1 to Stop or 2 to keep going   ")))
 
-        if game.status == False:
-            game.status == True
-            continue
-
         if (dices.isFootprint()):
             if (game.status == True):
+                dices.rollDices()
                 pass
-            else:
+            else:               # se o jogador optou por parar, o próximo jogador é selecionado
                 game.saveScore(newBrains)
-                
+                continue
+
         if (game.playerWonGame()):
             game.over = True
 
         game.turns+=1
-
-
+        game.selectNextPlayer()
 
 if __name__ == "__main__":
     main()
