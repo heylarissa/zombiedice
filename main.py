@@ -37,14 +37,15 @@ class Dice:
         return
 
 class Player:
-     
     def __init__(self, id):
+        """ Inicializa o jogador """
         self.turns = 0
         self.brains = 0
         self.id = id
 
 class Game:
     def __init__(self):
+        """ Inicializa o jogo """
         self.turns = 0
         self.brains = 0
         self.status = True
